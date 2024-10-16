@@ -33,3 +33,4 @@ message:
   exchange: app
   queue:
     bid-register: app.bid.register
+    auction-info: app.auction.info

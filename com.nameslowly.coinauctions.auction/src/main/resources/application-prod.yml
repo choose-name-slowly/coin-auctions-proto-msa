@@ -16,7 +16,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -24,7 +24,13 @@ spring:
         format-sql: true
         generate-ddl: true
 
+  rabbitmq:
+    host: rabbitMQ-server
+    port: 5672
+    username: guest
+    password: guest
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
+      defaultZone: http://eureka-service:8761/eureka/

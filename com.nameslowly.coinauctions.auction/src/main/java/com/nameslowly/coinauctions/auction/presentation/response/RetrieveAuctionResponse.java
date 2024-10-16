@@ -39,8 +39,8 @@ public class RetrieveAuctionResponse implements Serializable {
             .basePrice(auction.getBasePrice())
             .coinId(auction.getCoinId())
             .fixedCoinPrice(auction.getFixedCoinPrice())
-            .registerMemberUsername(auction.getRegisterMemberUsername())
-            .currentAmount(auction.getCurrentAmount())
+            .registerMemberUsername(auction.getRegisterUsername())
+            .currentAmount(auction.getWinAmount())
             .build();
     }
 

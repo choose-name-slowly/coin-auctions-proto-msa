@@ -3,7 +3,7 @@
 GET localhost:8080/host
 
 > {%
-  client.global.set("host", "13.125.123.80");
+  client.global.set("host", "localhost");
 %}
 
 ### AUTHSUSER-SERVICE ------------------------------------------------

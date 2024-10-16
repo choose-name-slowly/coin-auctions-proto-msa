@@ -16,6 +16,8 @@ public class QueueConfig {
     private String exchange;
     @Value("${message.queue.bid-register}")
     private String queueBidRegister;
+    @Value("${message.queue.auction-info}")
+    private String queueAuctionInfo;
 
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
@@ -35,6 +37,13 @@ public class QueueConfig {
     @Bean
     public Binding bindingBidRegister() {
         return BindingBuilder.bind(queueBidRegister()).to(exchange()).with(queueBidRegister);
+    }
+
+    @Bean public Queue queueAuctionInfo() {
+        return new Queue(queueAuctionInfo);
+    }
+    @Bean public Binding bindingAuctionInfo() {
+        return BindingBuilder.bind(queueAuctionInfo()).to(exchange()).with(queueAuctionInfo);
     }
 
 }

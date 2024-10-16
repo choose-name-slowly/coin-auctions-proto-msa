@@ -17,9 +17,9 @@ public class GatewayConfig {
 
         return builder.routes()
             // userAuth
-            .route("userAuth-service", r -> r.path("/api/auth/**")
+            .route("userauth-service", r -> r.path("/api/auth/**")
                 .filters(f -> f.filter(authFilter))
-                .uri("lb://userAuth-service")
+                .uri("lb://userauth-service")
             )
             // auction
             .route("auction-service", r -> r.path("/api/auctions/**")

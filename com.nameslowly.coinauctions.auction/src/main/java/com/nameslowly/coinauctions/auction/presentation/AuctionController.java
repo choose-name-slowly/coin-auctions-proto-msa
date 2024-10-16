@@ -6,6 +6,7 @@ import com.nameslowly.coinauctions.auction.infrastructure.coinpay.CoinpayService
 import com.nameslowly.coinauctions.auction.infrastructure.message.BidRegisterMessage;
 import com.nameslowly.coinauctions.auction.presentation.request.RegisterAuctionRequest;
 import com.nameslowly.coinauctions.auction.application.dto.response.AuctionDto;
+import com.nameslowly.coinauctions.auction.presentation.request.UpdateAuctionWinRequest;
 import com.nameslowly.coinauctions.auction.presentation.response.RegisterAuctionResponse;
 import com.nameslowly.coinauctions.auction.presentation.response.RetrieveAuctionPageResponse;
 import com.nameslowly.coinauctions.auction.presentation.response.RetrieveAuctionResponse;
@@ -28,7 +29,7 @@ public class AuctionController {
     private final CoinpayService coinpayService;
 
     @PostMapping("/api/auctions")
-    public CommonResponse<RegisterAuctionResponse> register(
+    public CommonResponse<RegisterAuctionResponse> registerAuction(
         @RequestBody RegisterAuctionRequest request) {
         Long auctionId = auctionService.registerAuction(request.toDto());
         return CommonResponse.success(new RegisterAuctionResponse(auctionId));
@@ -40,6 +41,23 @@ public class AuctionController {
         List<RetrieveAuctionPageResponse> response = auctionPage.stream()
             .map(RetrieveAuctionPageResponse::of).toList();
         return CommonResponse.success(response);
+    }
+
+    @PostMapping("/api/auctions/start")
+    public CommonResponse startAuction() {
+        auctionService.startAuction();
+        return CommonResponse.success();
+    }
+
+    @PostMapping("/api/auctions/{auctionId}/updateWin")
+    public CommonResponse updateAuctionWin(UpdateAuctionWinRequest request) {
+        return CommonResponse.success();
+    }
+
+    @PostMapping("/api/auctions/end")
+    public CommonResponse endAuction() {
+        auctionService.endAuction();
+        return CommonResponse.success();
     }
 
     @GetMapping("/api/auctions/{auctionId}")
@@ -61,6 +79,6 @@ public class AuctionController {
 
     @RabbitListener(queues = "${message.queue.bid-register}")
     public void bidAuction(BidRegisterMessage message) {
-        auctionService.bidAuction(message.toDto());
+        auctionService.updateAuctionWin(message.toDto());
     }
 }

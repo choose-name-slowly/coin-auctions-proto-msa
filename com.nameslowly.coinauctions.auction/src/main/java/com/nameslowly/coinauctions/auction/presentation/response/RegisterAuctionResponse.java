@@ -6,10 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class RegisterAuctionResponse implements Serializable {
 
     private Long auctionId;
-
 }
