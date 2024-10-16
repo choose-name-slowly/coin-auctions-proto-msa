@@ -140,9 +140,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: |
             ./init.sql
-#            coin-auctions-proto-msa/app-compose.yml
-#            coin-auctions-proto-msa/db-compose.yml
-#            coin-auctions-proto-msa/monitoring-compose.yml
+            ./*.yml
+
           target: "/home/ubuntu" # target 은 디렉토리임. target directory 아래에 같은 이름의 파일로 옮겨진다.
           debug: true # 추가: 디버그 모드 활성화 (로그좀 더 보려고)
 
