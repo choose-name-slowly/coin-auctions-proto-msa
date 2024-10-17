@@ -16,6 +16,14 @@ public class GatewayConfig {
     public RouteLocator customRoutes(RouteLocatorBuilder builder, JwtAuthGatewayFilter authFilter) {
 
         return builder.routes()
+            // login 시에는 인가(jwt토큰으로 인가) 없이 바로 라우팅
+            .route("userauth-service", r -> r.path("/user/login")
+                .uri("lb://userauth-service")
+            )
+            // 회원가입 시에도 인가(jwt토큰으로 인가) 없이 바로 라우팅 - 구체적인 경로로 우선적으로 처리된다
+            .route("userauth-service", r -> r.path("/api/auth/sign-up")
+                .uri("lb://userauth-service")
+            )
             // userAuth
             .route("userauth-service", r -> r.path("/api/auth/**")
                 .filters(f -> f.filter(authFilter))

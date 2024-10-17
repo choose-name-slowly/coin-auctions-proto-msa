@@ -10,7 +10,7 @@ public enum UserRole {
 
     MASTER("ROLE_MASTER"), // 마스터
     COMPANY("ROLE_USER"), // 경매 등록, 경매 입찰
-    HUBMANAGER("ROLE_GUEST"); // 구경
+    GUEST("ROLE_GUEST"); // 구경
 
     private final String authority;
 
