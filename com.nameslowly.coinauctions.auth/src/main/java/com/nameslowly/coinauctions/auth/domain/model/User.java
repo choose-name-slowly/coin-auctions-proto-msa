@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     private UserRole role;
 
     @Column(name = "is_public")
-    private boolean isPublic = true;
+    private Boolean isPublic = true;
 
     // 유저 생성 메서드
     public static User create(String username, String password, UserRole role

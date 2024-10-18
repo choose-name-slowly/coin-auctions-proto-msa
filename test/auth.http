@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
   "username": "user1234",
-  "password": "pwd1234@"
+  "password": "pwd1234@",
 }
 
 ### 로그아웃

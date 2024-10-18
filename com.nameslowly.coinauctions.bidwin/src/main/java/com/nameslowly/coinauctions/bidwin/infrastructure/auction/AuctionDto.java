@@ -11,17 +11,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuctionDto {
 
-    private Long auctionId;
-    private String title;
-    private String description;
+    private Long id;
     private String auctionStatus;
-    private LocalDateTime registerTime;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+
+    private String title;
+    private String image;
+    private String description;
+
     private BigDecimal basePrice;
     private Long coinId;
     private BigDecimal fixedCoinPrice;
-    private Long registerMemberId;
-    private BigDecimal currentPrice;
+
+    private String registerUsername;
+    private LocalDateTime registerTime;
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    private String winnerUsername;
+    private BigDecimal winAmount;
 
 }

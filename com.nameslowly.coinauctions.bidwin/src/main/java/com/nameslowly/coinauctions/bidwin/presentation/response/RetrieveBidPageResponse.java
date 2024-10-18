@@ -1,10 +1,6 @@
 package com.nameslowly.coinauctions.bidwin.presentation.response;
 
 import com.nameslowly.coinauctions.bidwin.domain.model.Bid;
-import com.nameslowly.coinauctions.bidwin.domain.model.BidStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,9 +22,9 @@ public class RetrieveBidPageResponse implements Serializable {
         return RetrieveBidPageResponse.builder()
             .id(bid.getId())
             .auctionId(bid.getAuctionId())
-            .participantMemberUsername(bid.getParticipantMemberUsername())
+            .participantMemberUsername(bid.getBidderUsername())
             .coinId(bid.getCoinId())
-            .coinAmount(bid.getCoinAmount())
+            .coinAmount(bid.getBidAmount())
             .bidTime(bid.getBidTime())
             .build();
     }

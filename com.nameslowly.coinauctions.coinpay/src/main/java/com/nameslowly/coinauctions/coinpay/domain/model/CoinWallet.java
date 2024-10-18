@@ -32,7 +32,7 @@ public class CoinWallet extends BaseEntity {
     private String username;
     @Column(name = "coin_id", nullable = false)
     private Long coinId;
-    @Column(precision = 12, scale = 2, nullable = false)
+    @Column(precision = 10, scale = 3, nullable = false)
     private BigDecimal quantity;
 
     public CoinWalletVO toCoinWalletVO() {

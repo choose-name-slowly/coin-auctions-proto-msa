@@ -21,9 +21,9 @@ public class RetrieveBidResponse {
         return RetrieveBidResponse.builder()
             .id(bid.getId())
             .auctionId(bid.getAuctionId())
-            .participantMemberUsername(bid.getParticipantMemberUsername())
+            .participantMemberUsername(bid.getBidderUsername())
             .coinId(bid.getCoinId())
-            .coinAmount(bid.getCoinAmount())
+            .coinAmount(bid.getBidAmount())
             .bidTime(bid.getBidTime())
             .build();
     }

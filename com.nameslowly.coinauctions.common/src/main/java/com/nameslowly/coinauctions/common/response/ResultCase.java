@@ -41,15 +41,16 @@ public enum ResultCase {
     NOT_FOUND_AUCTION(HttpStatus.BAD_REQUEST, 4001, "해당 경매 찾을 수 없음"),
     NOT_PENDING_AUCTION(HttpStatus.BAD_REQUEST, 4002, "대기 중인 경매 아님"),
     NOT_ONGOING_AUCTION(HttpStatus.BAD_REQUEST, 4003, "진행 중인 경매 아님"),
-    ONGOING_AUCTION(HttpStatus.BAD_REQUEST, 4003, "진행 중인 경매"),
+    NOT_END_AUCTION(HttpStatus.BAD_REQUEST, 4003, "끝나지 않은 경매"),
 
     /* bidwin-server 5000 */
     NOT_ENOUGH_USER_COIN_AMOUNT(HttpStatus.BAD_REQUEST, 5002, "유저 코인 부족"),
     NOT_ENOUGH_THAN_CURRENT_PRICE(HttpStatus.BAD_REQUEST, 5003, "현재 입찰 보다 적음"),
     NOT_ENOUGH_THAN_BASE_AMOUNT(HttpStatus.BAD_REQUEST, 5004, "경매 시작가 보다 적음"),
     NEW_BID_CREATE_ERROR(HttpStatus.BAD_REQUEST, 5005, "새 입찰 생성 에러"),
+    CURRENT_WINNER(HttpStatus.BAD_REQUEST, 5006, "현재 본인이 최고 입찰자"),
+    AUCTION_REGISTER(HttpStatus.BAD_REQUEST, 5006, "현재 본인이 경매 등록자"),
 
-    
     /* chat-server 6000 */
     CHATROOM_NOT_FOUND(HttpStatus.NOT_FOUND, 6000, "채팅방이 존재하지 않습니다."),
     CHATROOM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 6001, "채팅방-멤버 정보가 존재하지 않습니다."),

@@ -7,11 +7,9 @@ import com.nameslowly.coinauctions.bidwin.domain.service.BidReader;
 import com.nameslowly.coinauctions.bidwin.infrastructure.auction.AuctionDto;
 import com.nameslowly.coinauctions.bidwin.infrastructure.auction.AuctionService;
 import com.nameslowly.coinauctions.bidwin.infrastructure.coinpay.CoinBidRequest;
-import com.nameslowly.coinauctions.bidwin.infrastructure.coinpay.CoinDto;
 import com.nameslowly.coinauctions.bidwin.infrastructure.coinpay.CoinpayService;
 import com.nameslowly.coinauctions.bidwin.infrastructure.message.BidCancelMessage;
 import com.nameslowly.coinauctions.bidwin.infrastructure.message.BidRegisterMessage;
-import com.nameslowly.coinauctions.bidwin.infrastructure.user.UserDto;
 import com.nameslowly.coinauctions.bidwin.infrastructure.user.UserService;
 import com.nameslowly.coinauctions.common.exception.GlobalException;
 import com.nameslowly.coinauctions.common.response.ResultCase;
@@ -35,8 +33,8 @@ public class BidService {
     private final BidFactory bidFactory;
 
     private final UserService userService;
-    private final AuctionService auctionService;
     private final CoinpayService coinpayService;
+    private final AuctionService auctionService;
 
     private final RabbitTemplate rabbitTemplate;
     @Value("${message.queue.bid-cancel}")
@@ -65,80 +63,62 @@ public class BidService {
      *              7. chatting create (event)
      *          5.2 auction base coin amount > new bid coin amount -> exception
      */
+    @Transactional
     public Long register(RegisterBidDto dto) {
-        UserDto user = userService.getUser(dto.getParticipantMemberUsername());
-        log.info("입찰자 조회");
+        userService.getUser(dto.getBidderUsername());
+        coinpayService.getCoin(dto.getCoinId());
         AuctionDto auction = auctionService.getAuction(dto.getAuctionId());
-        log.info("경매 조회");
-        CoinDto coin = coinpayService.getCoin(dto.getCoinId());
-        log.info("코인 조회");
 
         if (!auction.getAuctionStatus().equals("ONGOING")) {
-            log.info("진행 중인 경매 아님");
             throw new GlobalException(ResultCase.NOT_ONGOING_AUCTION);
         }
 
-        Bid newBid;
         Boolean isNewBid = false;
         BidCancelMessage bidCancelMessage = null;
         Optional<Bid> winBidOpt = bidReader.findWinBidByAuctionId(dto.getAuctionId());
         if (winBidOpt.isPresent()) {
-            log.info("현재 입찰 존재");
             Bid winBid = winBidOpt.get();
 
-            if (winBid.getParticipantMemberUsername().equals(dto.getParticipantMemberUsername())) {
-                throw new RuntimeException("최고 입찰자가 본인임");
+            if (auction.getRegisterUsername().equals(dto.getBidderUsername())) {
+                throw new GlobalException(ResultCase.AUCTION_REGISTER);
             }
 
-            if (notExceed(dto.getCoinAmount(), winBid.getCoinAmount())) {
-                log.info("현재 입찰 보다 적음");
+            if (winBid.getBidderUsername().equals(dto.getBidderUsername())) {
+                throw new GlobalException(ResultCase.CURRENT_WINNER);
+            }
+
+            if (notExceed(dto.getBidAmount(), winBid.getBidAmount())) {
                 throw new GlobalException(ResultCase.NOT_ENOUGH_THAN_CURRENT_PRICE);
             }
 
-            bidCancelMessage = new BidCancelMessage(
-                winBid.getParticipantMemberUsername(), winBid.getCoinId(),
-                winBid.getCoinAmount());
+            winBid.cancel();
+
+            bidCancelMessage =new BidCancelMessage(winBid.getBidderUsername(), winBid.getCoinId(), winBid.getBidAmount());
         } else {
             isNewBid = true;
-            log.info("최초 입찰");
 
-            if (notExceed(dto.getCoinAmount().multiply(auction.getFixedCoinPrice()),
-                auction.getBasePrice())) {
-                log.info("경매 시작가보다 보다 적음");
+            if (notExceed(dto.getBidAmount().multiply(auction.getFixedCoinPrice()), auction.getBasePrice())) {
                 throw new GlobalException(ResultCase.NOT_ENOUGH_THAN_BASE_AMOUNT);
             }
         }
 
-        if (!coinpayService.useCoin(
-            new CoinBidRequest(dto.getParticipantMemberUsername(), dto.getCoinId(),
-                dto.getCoinAmount()))) {
-            log.info("새 입찰자 코인 부족");
+        if (!coinpayService.useCoin(new CoinBidRequest(dto.getBidderUsername(), dto.getCoinId(), dto.getBidAmount()))) {
             throw new GlobalException(ResultCase.NOT_ENOUGH_USER_COIN_AMOUNT);
         }
-        log.info("새 입찰자 코인 사용");
 
+        Bid newBid;
         try {
             newBid = bidFactory.create(dto);
-            log.info("새 입찰 생성");
         } catch (Exception e) {
-            log.info("새 입찰 생성 에러");
-            coinpayService.recoverCoin(
-                new CoinBidRequest(dto.getParticipantMemberUsername(), dto.getCoinId(),
-                    dto.getCoinAmount()));
-            log.info("새 입찰자 코인 회복");
+            coinpayService.recoverCoin(new CoinBidRequest(dto.getBidderUsername(), dto.getCoinId(), dto.getBidAmount()));
             throw new GlobalException(ResultCase.NEW_BID_CREATE_ERROR);
         }
 
-        log.info("새 입찰 등록");
-
-        BidRegisterMessage bidRegisterMessage = new BidRegisterMessage(newBid.getAuctionId(),
-            newBid.getCoinAmount());
+        BidRegisterMessage bidRegisterMessage = new BidRegisterMessage(newBid.getAuctionId(), newBid.getBidderUsername(), newBid.getBidAmount());
         rabbitTemplate.convertAndSend(queueBidRegister, bidRegisterMessage);
-        log.info("새 입찰 등록 메시지 발행");
 
         if (!isNewBid) {
             rabbitTemplate.convertAndSend(queueBidCancel, bidCancelMessage);
-            log.info("현재 입찰 취소 메시지 발행");
         }
 
         return newBid.getId();

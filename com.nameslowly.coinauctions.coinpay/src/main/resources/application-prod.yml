@@ -9,13 +9,21 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         show-sql: true
         format-sql: true
         generate-ddl: true
+
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: >
+        classpath:data/coinpay.sql
 
   rabbitmq:
     host: rabbitMQ-server
@@ -26,9 +34,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://eureka-server:8761/eureka/
-
-message:
-  exchange: app
-  queue:
-    bid-cancel: app.bid.cancel
+      defaultZone: http://eureka-service:8761/eureka/

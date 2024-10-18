@@ -30,11 +30,11 @@ public class CoinHistory extends BaseEntity {
     private Long id;
     private String username;
     private Long coinId;
-    @Column(precision = 12, scale = 2, nullable = false)
+    @Column(precision = 10, scale = 3, nullable = false)
     private BigDecimal amount;
-    @Column(name = "balance_before")
+    @Column(precision = 10, scale = 3, name = "balance_before")
     private BigDecimal balanceBefore;
-    @Column(name = "balance_after")
+    @Column(precision = 10, scale = 3, name = "balance_after")
     private BigDecimal balanceAfter;
     private String reason; //EX)코인 충전, 코인 바인딩, 새로운 입찰로 인한 코인 회복 Enum으로 다루는게 나을라나?
 

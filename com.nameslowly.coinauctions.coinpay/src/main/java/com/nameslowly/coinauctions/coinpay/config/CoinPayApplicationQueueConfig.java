@@ -17,10 +17,14 @@ public class CoinPayApplicationQueueConfig {
     private String exchange;
     @Value("${message.queue.bid-cancel}")
     private String queueBidCancel;
+    @Value("app.coinpay.history")
+    private String queueCoinHistory;
     @Bean
     public TopicExchange exchange() { return new TopicExchange(exchange); }
     @Bean public Queue queueBidCancel() { return new Queue(queueBidCancel); }
+    @Bean public Queue queueCoinHistory() { return new Queue(queueCoinHistory); }
     @Bean public Binding bindingBidCancel() { return BindingBuilder.bind(queueBidCancel()).to(exchange()).with(queueBidCancel); }
+    @Bean public Binding bindingCoinHistory() {return BindingBuilder.bind(queueCoinHistory()).to(exchange()).with(queueCoinHistory); }
     @Bean
     public RabbitTemplate rabbitTemplate(org.springframework.amqp.rabbit.connection.ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

@@ -19,7 +19,7 @@ GET localhost:8084/api/internal/coins/1
 ### 코인 지갑 생성
 POST localhost:8084/api/coin_wallets
 Content-Type: application/json
-X-User-Name: user1234
+X-User-Name: seongjin2222
 
 {
   "charge_amount": 10000,

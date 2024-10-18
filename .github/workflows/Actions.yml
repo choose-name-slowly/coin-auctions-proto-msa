@@ -212,4 +212,3 @@ jobs:
             docker-compose -f db-compose.yml up -d
             sleep 60 # db 띄울때까지 좀 쉬렴
             docker-compose -f app-compose.yml up -d
-

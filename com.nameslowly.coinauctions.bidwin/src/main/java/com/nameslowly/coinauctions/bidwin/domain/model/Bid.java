@@ -29,23 +29,28 @@ public class Bid extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "bid_id")
     private Long id;
-    private Long auctionId;
-    private String participantMemberUsername;
-    private Long coinId;
-    @Column(precision = 10, scale = 3)
-    private BigDecimal coinAmount;
     @Enumerated(EnumType.STRING)
     private BidStatus bidStatus;
+
+    private String bidderUsername;
+    private Long auctionId;
+    private Long coinId;
+    @Column(precision = 10, scale = 3)
+    private BigDecimal bidAmount;
     private LocalDateTime bidTime;
 
     @Builder
-    public Bid(Long auctionId, String participantMemberUsername, Long coinId,
-        BigDecimal coinAmount) {
+    public Bid(Long auctionId, String bidderUsername, Long coinId,
+        BigDecimal bidAmount) {
         this.auctionId = auctionId;
-        this.participantMemberUsername = participantMemberUsername;
+        this.bidderUsername = bidderUsername;
         this.coinId = coinId;
-        this.coinAmount = coinAmount;
+        this.bidAmount = bidAmount;
         this.bidStatus = BidStatus.WIN;
         this.bidTime = LocalDateTime.now();
+    }
+
+    public void cancel() {
+        this.bidStatus = BidStatus.CANCEL;
     }
 }

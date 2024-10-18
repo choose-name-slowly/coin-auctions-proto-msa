@@ -32,61 +32,72 @@ public class Auction extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "auction_id")
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private AuctionStatus auctionStatus;
+
     private String title;
     private String image;
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private AuctionStatus auctionStatus;
-    private LocalDateTime registerTime;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    @Column(precision = 10, scale = 3)
     private BigDecimal basePrice;
     private Long coinId;
-    private BigDecimal fixedCoinPrice;
-    private String registerMemberUsername;
+    @Column(precision = 10, scale = 3)
+    private BigDecimal fixedCoinPrice; // 경매 시작시 조회
 
-    private BigDecimal currentAmount;
-    private String winUserUsername;
+    private String registerUsername;
+    private LocalDateTime registerTime;
+
+    private LocalDateTime startTime;
+    private LocalDateTime endTime; // startTime + AUCTION_DURATION_HOUR
+
+    private String winnerUsername; // 입찰시 갱신
+    @Column(precision = 10, scale = 3)
+    private BigDecimal winAmount; // 입찰시 갱신
 
     @Builder
     public Auction(String title, String image, String description, BigDecimal hopePrice,
-        Long coinId, String registerMemberUsername) {
+        Long coinId, String registerUsername) {
+
+        this.auctionStatus = AuctionStatus.PENDING;
 
         this.title = title;
         this.image = image;
         this.description = description;
 
-        this.auctionStatus = AuctionStatus.PENDING;
-        this.registerTime = LocalDateTime.now();
         this.basePrice = hopePrice.add(OPERATING_COASTS);
         this.coinId = coinId;
-        this.registerMemberUsername = registerMemberUsername;
+
+        this.registerUsername = registerUsername;
+        this.registerTime = LocalDateTime.now();
     }
 
     public void start(BigDecimal fixedCoinPrice) {
+
         if (this.auctionStatus != AuctionStatus.PENDING) {
             throw new GlobalException(ResultCase.NOT_PENDING_AUCTION);
         }
-        this.startTime = LocalDateTime.now();
-        this.endTime = this.startTime.plusMinutes(AUCTION_DURATION_HOUR);
-        this.fixedCoinPrice = fixedCoinPrice;
+
         this.auctionStatus = AuctionStatus.ONGOING;
+        this.fixedCoinPrice = fixedCoinPrice;
+        this.startTime = LocalDateTime.now();
+        this.endTime = this.startTime.plusHours(AUCTION_DURATION_HOUR);
     }
 
     public void end() {
+
         if (this.auctionStatus != AuctionStatus.ONGOING) {
             throw new GlobalException(ResultCase.NOT_ONGOING_AUCTION);
         }
-        if (this.endTime.isAfter(LocalDateTime.now())) {
-            throw new GlobalException(ResultCase.ONGOING_AUCTION);
+
+        if (this.endTime.isBefore(LocalDateTime.now())) {
+            this.auctionStatus =
+                this.winnerUsername == null ? AuctionStatus.FAIL : AuctionStatus.SUCCESS;
         }
-        this.auctionStatus =
-            this.currentAmount == null ? AuctionStatus.FAIL : AuctionStatus.SUCCESS;
     }
 
-    public void bid(String bidUserUsername, BigDecimal bidAmount) {
-        this.winUserUsername = bidUserUsername;
-        this.currentAmount = bidAmount;
+    public void updateWin(String winnerUsername, BigDecimal winAmount) {
+        this.winnerUsername = winnerUsername;
+        this.winAmount = winAmount;
     }
 }

@@ -9,7 +9,7 @@ import lombok.Getter;
 public class BidAuctionDto {
 
     private Long auctionId;
-    private String bidUserUsername;
-    private BigDecimal bidAmount;
+    private String winnerUsername;
+    private BigDecimal winAmount;
 
 }

@@ -4,6 +4,7 @@ import com.nameslowly.coinauctions.coinpay.domain.model.CoinVO;
 import com.nameslowly.coinauctions.coinpay.application.dto.request.CoinCreateRequest;
 import com.nameslowly.coinauctions.coinpay.application.service.CoinService;
 import com.nameslowly.coinauctions.common.response.CommonResponse;
+import com.nameslowly.coinauctions.common.shared.RoleCheck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ public class CoinController {
 
     private final CoinService coinService;
 
+    @RoleCheck(roles = {"MASTER"})
     @PostMapping("/coins/create")
     public CommonResponse createCoin(@RequestBody CoinCreateRequest coinRequest) {
         // Upbit API에서 코인 가격 가져오기
@@ -30,6 +32,7 @@ public class CoinController {
         return CommonResponse.success(coinService.getAllCoins());
     }
 
+    @RoleCheck(roles = {"MASTER"})
     @DeleteMapping("/coins/{coinId}")
     public CommonResponse deleteCoin(@PathVariable Long coinId){
         CoinVO coin = coinService.deleteCoin(coinId);

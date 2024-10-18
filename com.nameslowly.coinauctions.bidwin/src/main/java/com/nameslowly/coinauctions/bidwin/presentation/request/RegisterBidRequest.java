@@ -19,9 +19,9 @@ public class RegisterBidRequest {
     public RegisterBidDto toDto() {
         return RegisterBidDto.builder()
             .auctionId(this.auctionId)
-            .participantMemberUsername(this.participantMemberUsername)
+            .bidderUsername(this.participantMemberUsername)
             .coinId(this.coinId)
-            .coinAmount(this.coinAmount)
+            .bidAmount(this.coinAmount)
             .build();
     }
 }

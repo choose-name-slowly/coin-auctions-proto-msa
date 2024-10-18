@@ -3,10 +3,10 @@ POST http://localhost:8083/api/bids
 Content-Type: application/json
 
 {
-  "auctionId": 1,
-  "participantMemberUsername": "user1234",
+  "auctionId": 2,
+  "participantMemberUsername": "seongjin2222",
   "coinId": 1,
-  "coinAmount": 30.01
+  "coinAmount": 3.02
 }
 
 ### 입찰 목록 조회

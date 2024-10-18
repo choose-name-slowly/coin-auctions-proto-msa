@@ -1,10 +1,12 @@
 package com.nameslowly.coinauctions.coinpay.application.service;
 
+import com.nameslowly.coinauctions.coinpay.application.dto.response.CoinHistoryMessage;
 import com.nameslowly.coinauctions.coinpay.domain.model.CoinHistory;
 import com.nameslowly.coinauctions.coinpay.domain.model.CoinHistoryVO;
 import com.nameslowly.coinauctions.coinpay.domain.repository.CoinHistoryRepository;
 import com.nameslowly.coinauctions.common.exception.GlobalException;
 import com.nameslowly.coinauctions.common.response.ResultCase;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +30,19 @@ public class CoinHistoryService {
         return coinHistories.stream()
             .map(CoinHistory::toCoinHistoryVO)
             .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void createCoinHistory(String username, Long coinId, BigDecimal amount,
+        BigDecimal balanceBefore, BigDecimal balanceAfter, String reason) {
+        CoinHistory coinHistory = CoinHistory.builder()
+            .username(username)
+            .coinId(coinId)
+            .amount(amount)
+            .balanceBefore(balanceBefore)
+            .balanceAfter(balanceAfter)
+            .reason(reason)
+            .build();
+        coinHistoryRepository.save(coinHistory);
     }
 }

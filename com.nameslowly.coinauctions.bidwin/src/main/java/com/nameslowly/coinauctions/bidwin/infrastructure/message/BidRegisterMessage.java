@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class BidRegisterMessage {
 
     private Long auctionId;
-    private BigDecimal bidAmount;
+    private String winnerUsername;
+    private BigDecimal winAmount;
 
 }

@@ -13,9 +13,11 @@ public class RegisterAuctionRequest {
     private String title;
     private String image;
     private String description;
+
     private BigDecimal hopePrice;
     private Long coinId;
-    private String registerMemberUsername;
+
+    private String registerUsername;
 
     public RegisterAuctionDto toDto() {
         return RegisterAuctionDto.builder()
@@ -24,7 +26,7 @@ public class RegisterAuctionRequest {
             .description(this.description)
             .hopePrice(this.hopePrice)
             .coinId(this.coinId)
-            .registerMemberUsername(this.registerMemberUsername)
+            .registerUsername(this.registerUsername)
             .build();
     }
 }

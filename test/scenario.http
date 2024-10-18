@@ -1,43 +1,187 @@
-### 회원 가입
-POST http://localhost:8081/api/auth/sign-up
+### HOST 설정 // local : localhost // ec2 : 13.125.123.80 // 변경 후 해당 API 한번 실행해주기
+
+GET localhost:8080/host
+
+> {%
+  client.global.set("host", "localhost");
+%}
+
+### -----------------------------------------------------
+
+### register789 로그인
+POST {{host}}:8080/user/login
 Content-Type: application/json
 
 {
-  "username": "user1234",
+  "username": "register789",
   "password": "pwd1234@"
 }
 
-### 경매 등록
-POST http://localhost:8082/api/auctions
+> {%
+  token = response.body.data.token.replace("Bearer ", "");
+  client.global.set("token", token);
+%}
+
+### register789 경매 등록
+POST localhost:8080/api/auctions
 Content-Type: application/json
+Authorization: {{token}}
 
 {
-  "title": "Galaxy S24",
+  "title": "Galaxy s24",
   "image": "http://example.com/Galaxy S24.jpg",
   "description": "액정 고장남",
   "hopePrice": 1000,
-  "coinId": 3,
-  "registerMemberId": 123
+  "coinId": 1,
+  "registerUsername": "register789"
 }
 
-### 최초 입찰
-POST http://localhost:8083/api/bids
+### bider456 로그인
+POST {{host}}:8080/user/login
 Content-Type: application/json
 
 {
-  "auctionId": 1,
-  "participantMemberUsername": "panjun",
-  "coinId": 3,
-  "coinAmount": 15
+  "username": "bider456",
+  "password": "pwd1234@"
 }
 
-### 재입찰
-POST http://localhost:8083/api/bids
+> {%
+  token = response.body.data.token.replace("Bearer ", "");
+  client.global.set("token", token);
+%}
+
+### bider456 코인 충전
+POST {{host}}:8080/api/coin_wallets
 Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "charge_amount": 10000,
+  "coin_id": 1
+}
+
+### 경매 시작
+POST {{host}}:8080/api/auctions/start
+Authorization: {{token}}
+
+### bider456 최초 입찰 // 경매 시작가보다 적음
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
 
 {
   "auctionId": 1,
-  "participantMemberUsername": "hyeokjin",
-  "coinId": 3,
-  "coinAmount": 16.01
+  "participantMemberUsername": "bider456",
+  "coinId": 1,
+  "coinAmount": 1
+}
+
+### bider456 최초 입찰 // 성공
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider456",
+  "coinId": 1,
+  "coinAmount": 2
+}
+
+### bider456 최초 입찰 // 본인이 최고 입찰자
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider456",
+  "coinId": 1,
+  "coinAmount": 2.1
+}
+
+### bider123 로그인
+POST {{host}}:8080/user/login
+Content-Type: application/json
+
+{
+  "username": "bider123",
+  "password": "pwd1234@"
+}
+
+> {%
+  token = response.body.data.token.replace("Bearer ", "");
+  client.global.set("token", token);
+%}
+
+### bider123 입찰 // 현재 입찰가보다 적음
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider123",
+  "coinId": 1,
+  "coinAmount": 1.9
+}
+
+### bider123 입찰 // 보유 코인 부족
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider123",
+  "coinId": 1,
+  "coinAmount": 2.2
+}
+
+### bider123 코인 충전
+POST {{host}}:8080/api/coin_wallets
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "charge_amount": 5000,
+  "coin_id": 1
+}
+
+### bider123 입찰 // 성공
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider123",
+  "coinId": 1,
+  "coinAmount": 2.2
+}
+
+### bider456 로그인
+POST {{host}}:8080/user/login
+Content-Type: application/json
+
+{
+  "username": "bider456",
+  "password": "pwd1234@"
+}
+
+> {%
+  token = response.body.data.token.replace("Bearer ", "");
+  client.global.set("token", token);
+%}
+
+### bider456 입찰 // 성공
+POST {{host}}:8080/api/bids
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "auctionId": 1,
+  "participantMemberUsername": "bider456",
+  "coinId": 1,
+  "coinAmount": 3
 }

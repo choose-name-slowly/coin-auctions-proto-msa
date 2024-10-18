@@ -105,13 +105,13 @@ public class WebSecurityConfig {
     private void settingRequestAuthorization(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authz ->
                 authz
-                        // 정적 파일
+                        // 정적 파일 드루와
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        // Swagger UI
+                        // Swagger UI 드루와
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        // auth api
+                        // 유저 컨트롤러 쓸거면 드루와
                         .requestMatchers("/api/auth/**").permitAll()
-                        // auth-filter api
+                        // 로그인할거면 드루와
                         .requestMatchers("/user/login").permitAll()
                         // 그 외
                         .anyRequest().authenticated() // TODO : 인증 구현 후 authenticated()로 변경

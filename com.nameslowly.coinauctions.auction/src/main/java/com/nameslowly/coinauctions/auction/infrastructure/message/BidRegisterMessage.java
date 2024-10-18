@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 public class BidRegisterMessage {
 
     private Long auctionId;
-    private String bidUserUsername;
-    private BigDecimal bidAmount;
+    private String winnerUsername;
+    private BigDecimal winAmount;
 
     public BidAuctionDto toDto() {
         return BidAuctionDto.builder()
             .auctionId(this.auctionId)
-            .bidUserUsername(this.bidUserUsername)
-            .bidAmount(this.bidAmount)
+            .winnerUsername(this.winnerUsername)
+            .winAmount(this.winAmount)
             .build();
     }
 

@@ -33,7 +33,7 @@ public class Coin extends BaseEntity {
     private String coinName;
     @Column(name = "coin_real_name", nullable = false, unique = true)
     private String coinRealName;
-    @Column(precision = 10, scale = 2, name = "coin_price", nullable = false)
+    @Column(precision = 10, scale = 3, name = "coin_price", nullable = false)
     private BigDecimal coinPrice;
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;

@@ -5,6 +5,7 @@ import com.nameslowly.coinauctions.coinpay.application.dto.request.CoinBidReques
 import com.nameslowly.coinauctions.coinpay.application.dto.request.CoinChargeRequest;
 import com.nameslowly.coinauctions.coinpay.application.service.CoinWalletService;
 import com.nameslowly.coinauctions.common.response.CommonResponse;
+import com.nameslowly.coinauctions.common.shared.RoleCheck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class CoinWalletController {
     private final CoinWalletService coinWalletService;
 
+    @RoleCheck(roles = {"USER"})
     @PostMapping("/coin_wallets")
     public CommonResponse chargeCoin(@RequestBody CoinChargeRequest request, @RequestHeader("X-User-Name") String username){
         CoinWalletVO coinWallet = coinWalletService.saveCoinWallet(request, username);
@@ -29,6 +31,7 @@ public class CoinWalletController {
     public void recoverBidCoin(@RequestBody CoinBidRequest request){
          coinWalletService.recoverBidCoin(request);
     }
+    @RoleCheck(roles = {"USER"})
     @GetMapping("/coin_wallets")
     public CommonResponse getCoinWallet(@RequestHeader("X-User-Name") String username){
         List<CoinWalletVO> coinWallet = coinWalletService.getCoinWallet(username);

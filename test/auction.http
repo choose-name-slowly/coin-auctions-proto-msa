@@ -1,5 +1,5 @@
 ### 경매 등록
-POST http://localhost:8082/api/auctions
+POST localhost:8082/api/auctions
 Content-Type: application/json
 
 {
@@ -7,15 +7,21 @@ Content-Type: application/json
   "image": "http://example.com/Galaxy S24.jpg",
   "description": "액정 고장남",
   "hopePrice": 1000,
-  "coinId": 3,
-  "registerMemberUsername": "user1234"
+  "coinId": 1,
+  "registerUsername": "user1234"
 }
 
+### 경매 시작
+POST localhost:8082/api/auctions/start
+
+### 경매 종료
+POST localhost:8082/api/auctions/end
+
 ### 경매 목록 조회
-GET http://localhost:8082/api/auctions
+GET localhost:8082/api/auctions
 
 ### 경매 단건 조회
-GET http://localhost:8082/api/auctions/1
+GET localhost:8082/api/auctions/1
 
 ### INTERNAL GET AUCTION
-GET http://localhost:8082/api/internal/auctions/1
+GET localhost:8082/api/internal/auctions/1
