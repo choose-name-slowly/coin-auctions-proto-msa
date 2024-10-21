@@ -16,11 +16,4 @@ public class ChatApplication {
 		SpringApplication.run(ChatApplication.class, args);
 	}
 
-	@Controller
-	public static class MainController {
-		@GetMapping("/")
-		public String main() {
-			return "redirect:/chat/rooms-list";
-		}
-	}
 }

@@ -25,6 +25,12 @@ spring:
         format-sql: true
         generate-ddl: true
 
+  rabbitmq:
+    host: rabbitMQ-server
+    port: 5672
+    username: guest
+    password: guest
+
 eureka:
   client:
     serviceUrl:

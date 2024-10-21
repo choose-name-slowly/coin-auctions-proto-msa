@@ -4,7 +4,6 @@ package com.nameslowly.coinauctions.chat.presentation.controller;
 import com.nameslowly.coinauctions.chat.application.dto.AuctionInfoMessage;
 import com.nameslowly.coinauctions.chat.application.service.ChatroomService;
 import com.nameslowly.coinauctions.chat.domain.model.Chatroom;
-import com.nameslowly.coinauctions.chat.infrastructure.user.AuthService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -21,11 +20,56 @@ import java.util.List;
 public class ChatroomController {
 
     private final ChatroomService chatroomService;
-    private final AuthService authService;
 
-    //채팅방 목록 -> 일단 유저서비스 켜서 feign으로 user 가져와서 이거 테스트 되는지 보자.
+    //채팅방 목록
     @GetMapping("/rooms-list")
-    public String getChatroomList(Model model, @RequestHeader(value = "X-User-Name", required = true) String username) {
+    public String getChatroomList(@RequestHeader(value = "X-User-Name") String username, Model model) {
+        getRoomList(username, model);
+        return "rooms";
+    }
+
+    //채팅방 들어가기(상세)
+    @GetMapping("/rooms/{chatroomId}")
+    public String enterChatroom(@PathVariable String chatroomId, Model model, @RequestHeader(value = "X-User-Name") String username) {
+        Chatroom chatroom = chatroomService.enterChatroom(chatroomId, username);
+        model.addAttribute("room", chatroom);
+        model.addAttribute("username", username);
+        return "room-detail";
+    }
+
+    //채팅방 나가기 -> 채팅방을 나가도 채팅방을 삭제하지 않으면 과거 채팅 기록 조회 가능함
+    @GetMapping("/rooms-out")
+    public String exitChatroom(@RequestHeader(value = "X-User-Name") String username, Model model) {
+        getRoomList(username, model);
+        return "rooms";
+    }
+
+    //채팅방 생성
+    @PostMapping("/rooms")
+    public String createChatroom(@RequestParam("roomname") String roomname, @RequestHeader(value = "X-User-Name") String username, Model model){
+        chatroomService.createChatroom(roomname, username);
+        getRoomList(username, model);
+        return "rooms";
+    }
+
+    //rabbitmq 메시징시스템에 의한 채팅방 생성
+    @RabbitListener(queues = "${message.queue.auction-info}")
+    public String receiveAuctionInfoMessage(AuctionInfoMessage auctionInfoMessage, @RequestHeader(value = "X-User-Name") String username, Model model){
+        log.info("CHAT RECEIVE:{}", auctionInfoMessage.toString());
+        chatroomService.createChatroom(auctionInfoMessage);
+        getRoomList(username, model);
+        return "rooms";
+    }
+
+    //채팅방 삭제 -> 채팅방 목록에서 보이지 않으므로 과거 채팅 기록 조회 불가능
+    @PutMapping("/rooms/{chatroomId}")
+    public String deleteChatroom(@PathVariable String chatroomId, @RequestHeader(value = "X-User-Name") String username, Model model){
+        chatroomService.deleteChatMember(chatroomId, username);
+        getRoomList(username, model);
+        return "rooms";
+    }
+
+    public void getRoomList(String username, Model model){
         model.addAttribute("username", username);
 
         //모든 채팅방 목록
@@ -35,46 +79,5 @@ public class ChatroomController {
         //내가 속한 채팅방 목록
         List<Chatroom> myChatroomList = chatroomService.getMyChatroomList(username);
         model.addAttribute("myrooms", myChatroomList);
-
-        return "rooms";
-    }
-    
-    //채팅방 들어가기(상세)
-    @GetMapping("/rooms/{chatroomId}")
-    public String enterChatroom(@PathVariable String chatroomId, Model model, @RequestHeader(value = "X-User-Name", required = true) String username) {
-        //chatroomId 메세징시스템에서 가져와야함
-        Chatroom chatroom = chatroomService.enterChatroom(chatroomId, username);
-        model.addAttribute("room", chatroom);
-        model.addAttribute("username", username);
-        return "room-detail";
-    }
-
-    //채팅방 나가기 -> 채팅방을 나가도 채팅방을 삭제하지 않으면 과거 채팅 기록 조회 가능함
-    @GetMapping("/rooms-out")
-    public String exitChatroom(Model model) {
-        List<Chatroom> chatroomList = chatroomService.getChatroomList();
-        model.addAttribute("rooms", chatroomList);
-        return "redirect:/api/chat/rooms-list";
-    }
-
-    //채팅방 생성
-    @PostMapping("/rooms")
-    public String createChatroom(@RequestParam("roomname") String roomname, @RequestHeader(value = "X-User-Name", required = true) String username){
-        chatroomService.createChatroom(roomname, username);
-        return "redirect:/api/chat/rooms-list";
-    }
-
-    //rabbitmq 메시징시스템에 의한 채팅방 생성
-    @RabbitListener(queues = "${message.queue.auction-info}")
-    public void receiveAuctionInfoMessage(AuctionInfoMessage auctionInfoMessage) {
-        log.info("CHAT RECEIVE:{}", auctionInfoMessage.toString());
-        chatroomService.createChatroom(auctionInfoMessage);
-    }
-
-    //채팅방 삭제 -> 채팅방 목록에서 보이지 않으므로 과거 채팅 기록 조회 불가능
-    @PutMapping("/rooms/{chatroomId}")
-    public String deleteChatroom(@PathVariable String chatroomId){
-        chatroomService.deleteChatMember(chatroomId);
-        return "redirect:/api/chat/rooms-list";
     }
 }

@@ -32,7 +32,7 @@ dependencies {
 	implementation(project(':com.nameslowly.coinauctions.common')) {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'
 		exclude group: 'com.mysql', module: 'mysql-connector-j'
-//		exclude group: 'org.springframewo rk.boot', module: 'spring-boot-starter-web'
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
 	}
 
 	// JWT Claims 추출위해 사용

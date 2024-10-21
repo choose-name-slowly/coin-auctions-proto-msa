@@ -41,13 +41,20 @@ public class GatewayConfig {
             )
             // coin
             .route("coinpay-service", r -> r.path("/api/coins/**", "/api/coin_wallets/**", "/api/coin_histories")
-
                 .filters(f -> f.filter(authFilter))
                 .uri("lb://coinpay-service")
             )
             // chat
-            .route("chat-service", r -> r.path("/api/chat/**", "/chat/**")
+            .route("chat-service", r -> r.path("/api/chat/**")
                 .filters(f -> f.filter(authFilter))
+                .uri("lb://chat-service")
+            )
+            //chat login
+            .route("chat-service-login", r -> r.path("/api/chatUser/login-page", "/ws/**", "/chat/**")
+                .uri("lb://chat-service")
+            )
+            // 정적 리소스(js, css, webjars)에 대한 접근
+            .route("static-resources", r -> r.path("/js/**", "/css/**", "/webjars/**")
                 .uri("lb://chat-service")
             )
             .build();

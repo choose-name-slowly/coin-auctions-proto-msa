@@ -5,9 +5,9 @@ import com.nameslowly.coinauctions.chat.application.service.ChatMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
 
-@RestController
+@Controller
 public class ChatMessageController {
 
     private final SimpMessagingTemplate template;

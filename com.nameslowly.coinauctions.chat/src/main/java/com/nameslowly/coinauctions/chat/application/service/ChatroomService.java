@@ -67,7 +67,7 @@ public class ChatroomService {
 
     @Transactional
     public void createChatroom(AuctionInfoMessage auctionInfoMessage) {
-        String roomname = auctionInfoMessage.getTitle();
+        String roomname = auctionInfoMessage.getTitle() + " 채팅방";
         String auctionEndTime = auctionInfoMessage.getEndTime();
         String username = auctionInfoMessage.getRegisterMemberUsername();
 
@@ -76,12 +76,12 @@ public class ChatroomService {
     }
 
     @Transactional
-    public void deleteChatMember(String chatroomId) {
+    public void deleteChatMember(String chatroomId, String username) {
         Chatroom chatroom = chatroomRepository.findById(Long.valueOf(chatroomId)).orElseThrow(
                 () -> new GlobalException(ResultCase.CHATROOM_NOT_FOUND)
         );
 
-        ChatroomMember chatroomMember = chatroomMemberRepository.findByChatroom(chatroom);
+        ChatroomMember chatroomMember = chatroomMemberRepository.findByChatroomAndUsername(chatroom, username);
         chatroomMember.setDelete(true);
     }
 

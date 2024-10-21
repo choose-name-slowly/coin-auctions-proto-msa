@@ -1,19 +1,42 @@
+### 회원가입
+POST localhost:8080/api/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "id",
+  "password": "password",
+  "role": "MASTER"
+}
+
+### 로그인
+POST localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "username": "id",
+  "password": "password"
+}
+
+### 채팅 로그인 페이지 이동
+GET localhost:8080/api/chatUser/login-page
+
 ### 채팅방 생성
-POST http://localhost:8085/api/chat/rooms?roomname=중고폰
-X-User-Name: user1
+POST http://localhost:8080/api/chat/rooms?roomname=중고폰333
+Authorization: {{token}}
 
 ### 채팅방 삭제
-PUT http://localhost:8085/api/chat/rooms/5
+PUT http://localhost:8080/api/chat/rooms/3
+Authorization: {{token}}
 
 ### 채팅방 목록 조회
-GET http://localhost:8085/api/chat/rooms-list
-X-User-Name: user1
+GET http://localhost:8080/api/chat/rooms-list
+Authorization: {{token}}
 
 ### 채팅방 들어가기
-GET http://localhost:8085/api/chat/rooms/1
-X-User-Name: user1
+GET http://localhost:8080/api/chat/rooms/1
+Authorization: {{token}}
 
 ### 채팅방 나가기
-GET http://localhost:8085/api/chat/rooms-out
-X-User-Name: user1
+GET http://localhost:8080/api/chat/rooms-out
+Authorization: {{token}}
 

@@ -4,15 +4,12 @@
         <meta charset="UTF-8">
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
-        <script src="/js/common.js"></script>
         <title>채팅방 목록</title>
     </head>
 
     <body>
         <div>
             <span th:text="${username}"></span>님 반갑습니다.</div>
-            <div><a href="javascript:logout()">로그아웃</a></div><br>
-            <!--<h1>채팅방 목록</h1>-->
         </div>
 
         <form th:action="@{/api/chat/rooms}" method="post">

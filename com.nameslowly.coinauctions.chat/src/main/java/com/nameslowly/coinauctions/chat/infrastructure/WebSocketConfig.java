@@ -12,16 +12,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-   /* private final AuthChannelInterceptor channelInterceptor;
-
-    public WebSocketConfig(AuthChannelInterceptor channelInterceptor) {
-        this.channelInterceptor = channelInterceptor;
-    }
-*/
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat").withSockJS();
+        registry
+                .addEndpoint("/chat")
+                .setAllowedOrigins("http://localhost:8080","http://localhost:8085","http://13.125.123.80:8080","http://13.125.123.80:8085")
+                .withSockJS();
     }
 
     @Override
@@ -29,10 +25,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/publish");
         registry.enableSimpleBroker("/subscribe");
     }
-
-   /* @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        // Add our interceptor for authentication/authorization
-        registration.interceptors(channelInterceptor);
-    }*/
 }

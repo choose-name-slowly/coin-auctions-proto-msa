@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <title>로그인 페이지</title>
+  </head>
+
+  <body>
+    <div>
+      <div>
+        <div>아이디</div><input type="text" name="username" id="username">
+        <div>비밀번호</div><input type="password" name="password" id="password">
+        <button onclick="onLogin()">로그인</button>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    $(document).ready(function () {
+      Cookies.remove('Authorization', {path: '/'}); //토큰 삭제
+    });
+
+    function onLogin() {
+        let username = $('#username').val();
+        let password = $('#password').val();
+
+        $.ajax({
+          type: "POST",
+          url: `/user/login`,
+          contentType: "application/json",
+          data: JSON.stringify({username: username, password: password}),
+        })
+        .done(function (res, status, xhr) {
+            const token = xhr.getResponseHeader('Authorization');
+            console.log("token: ",token);
+            Cookies.set('Authorization', token, {path: '/'})
+
+            $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+              jqXHR.setRequestHeader('Authorization', token);
+            });
+
+            window.location.href = 'http://' + window.location.host + '/api/chat/rooms-list';
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert("Login Fail");
+        });
+
+    }
+  </script>
+</html>

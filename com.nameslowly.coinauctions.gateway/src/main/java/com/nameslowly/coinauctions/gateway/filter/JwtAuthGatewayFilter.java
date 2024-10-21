@@ -27,6 +27,15 @@ public class JwtAuthGatewayFilter implements GatewayFilter {
         HttpHeaders headers = exchange.getRequest().getHeaders(); // 헤더
         log.info("headers {}",headers);
         String token = headers.getFirst(HttpHeaders.AUTHORIZATION); // 헤더의 토큰
+
+        if(token == null) {
+            String cookieHeader = headers.getFirst("cookie" );
+            if (cookieHeader != null && cookieHeader.contains("Authorization=" )) {
+                token = cookieHeader.substring(cookieHeader.indexOf("Authorization=" ) + "Authorization=".length()).split(";" )[0];
+                token = token.replaceFirst("^Bearer%20", "" );
+            }
+        }
+
         log.info("token {}",token);
         Claims claims = jwtUtils.isTokenValid(token);
         log.info("claims {}",claims); // payload 임 payload 가 claim 들의 집합임
