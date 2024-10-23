@@ -37,7 +37,7 @@ public class ChatMessage {
     @Enumerated(EnumType.STRING)
     private MessageType type;
 
-    //private String image;
+    private String imageurl;
 
     private boolean isDelete = false;
 
@@ -50,6 +50,7 @@ public class ChatMessage {
         this.message = chatMessageDto.getMessage();
         this.sendTime = LocalDateTime.now();
         this.type = MessageType.valueOf(chatMessageDto.getType());
+        this.imageurl = chatMessageDto.getImageurl();
         this.chatroom = chatroom;
     }
 
@@ -58,6 +59,7 @@ public class ChatMessage {
         this.message = enterMsg;
         this.sendTime = LocalDateTime.now();
         this.type = MessageType.valueOf(chatMessageDto.getType());
+        this.imageurl = chatMessageDto.getImageurl();
         this.chatroom = chatroom;
     }
 }

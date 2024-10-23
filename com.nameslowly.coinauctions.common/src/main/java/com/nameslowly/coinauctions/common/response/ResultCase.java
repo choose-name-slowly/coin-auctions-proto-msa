@@ -55,7 +55,8 @@ public enum ResultCase {
     CHATROOM_NOT_FOUND(HttpStatus.NOT_FOUND, 6000, "채팅방이 존재하지 않습니다."),
     CHATROOM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, 6001, "채팅방-멤버 정보가 존재하지 않습니다."),
     CHATMESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, 6002, "채팅 메시지가 존재하지 않습니다."),
-    
+    EXTENSION_NOT_PROVIDED(HttpStatus.NOT_ACCEPTABLE, 6003, "지원하지 않는 확장자 입니다."),
+    CANT_UPLOAD_OVER_10MB(HttpStatus.NOT_ACCEPTABLE, 6004, "10MB이상은 업로드할 수 없습니다."),
 
     /* coinpay-server 7000 */
     COIN_NOT_FOUND(HttpStatus.NOT_FOUND, 7000, "코인을 찾을 수 없습니다."),

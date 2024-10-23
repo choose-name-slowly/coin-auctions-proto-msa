@@ -16,7 +16,7 @@ public class ChatMessageDto {
     private String message;
     private LocalDateTime sendTime;
     private String type;
-    //private String image;
+    private String imageurl;
     private boolean isDelete;
     private Long chatroomId;
 }

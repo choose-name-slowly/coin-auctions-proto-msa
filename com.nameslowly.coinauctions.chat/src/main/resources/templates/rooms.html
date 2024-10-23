@@ -21,14 +21,14 @@
         </form>
 
         <h1>모든 채팅방 목록</h1>
-        <ul>
+        <ul class="roomlist">
             <li th:each="room : ${rooms}">
                 <a th:href="@{/api/chat/rooms/{chatroomId}(chatroomId=${room.chatroomId})}" th:text="${room.roomname}"></a>
             </li>
         </ul>
 
         <h1>내가 속한 채팅방 목록</h1>
-        <ul>
+        <ul class="roomlist">
             <li th:each="myroom : ${myrooms}">
                 <a th:href="@{/api/chat/rooms/{chatroomId}(chatroomId=${myroom.chatroomId})}" th:text="${myroom.roomname}"></a>
 

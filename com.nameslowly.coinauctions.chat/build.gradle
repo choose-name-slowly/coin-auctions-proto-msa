@@ -28,21 +28,8 @@ ext {
 }
 
 dependencies {
-
-	// zipkin  Micrometer와의 연동까지 포함, 더 세밀한 제어를 위해 씀)
-	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-	implementation 'io.github.openfeign:feign-micrometer'
-	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-
-	// actuator
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
-	// proemetheus
-	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.json:json:20230227'
-
+	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.2.0")
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
 
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -58,6 +45,8 @@ dependencies {
 
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.json:json:20230227'
 
 	implementation 'org.webjars.bower:jquery:3.3.1'
 	implementation 'org.webjars:sockjs-client:1.1.2'
@@ -66,8 +55,14 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	implementation project(path: ':com.nameslowly.coinauctions.common')
-	// SWAGGER
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+
+	// zipkin  Micrometer와의 연동까지 포함, 더 세밀한 제어를 위해 씀)
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'io.github.openfeign:feign-micrometer'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 dependencyManagement {

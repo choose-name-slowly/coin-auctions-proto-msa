@@ -7,9 +7,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 드라이버 클래스 이름
-    url: jdbc:mysql://mysql-db:3306/chat  # MySQL 데이터베이스 URL
-    username: chat_user  # 데이터베이스 사용자 이름
-    password: chat_password  # 데이터베이스 비밀번호
+    url: jdbc:mysql://localhost:3306/coinauction  # MySQL 데이터베이스 URL
+    username: root  # 데이터베이스 사용자 이름
+    password: 1234  # 데이터베이스 비밀번호
 
   jpa:
     hibernate:

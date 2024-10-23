@@ -1,17 +1,22 @@
-ul {
+.roomlist {
     list-style-type: none; /* 기본 불릿 없애기 */
     padding-left: 0;
 }
 
-ul li {
+.roomlist li {
     position: relative; /* ::before 사용을 위한 위치 설정 */
     padding-left: 25px; /* 아이콘을 위한 공간 확보 */
 }
 
-ul li::before {
+.roomlist li::before {
     content: "💠"; /* 원하는 모양으로 대체 */
-//content: "!";
     position: absolute;
     left: 0; /* 아이콘 위치 설정 */
     font-size: 1.2em; /* 아이콘 크기 조정 */
+}
+
+img {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
 }
