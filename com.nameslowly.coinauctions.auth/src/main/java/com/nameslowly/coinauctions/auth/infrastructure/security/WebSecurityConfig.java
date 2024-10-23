@@ -114,8 +114,13 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         // 로그인할거면 드루와
                         .requestMatchers("/user/login").permitAll()
+                        // auth actuator 에 대한 접근
+                        // TODO : yml 에 시큐리티 유저정보 넣어서 인증된 사용자만 접근하게끔 할 수 있음
+                        // TODO : 혹은 특정 IP 에서의 접근만 혹은 특정 엔드포인트로의 접근만 허락할 수도
+                        .requestMatchers("/actuator/**").permitAll()
+
                         //채팅 로그인 페이지
-                        .requestMatchers("/api/chatUser/login-page").permitAll()
+                        //.requestMatchers("/api/chatUser/login-page").permitAll()
                         // 그 외
                         .anyRequest().authenticated() // TODO : 인증 구현 후 authenticated()로 변경
         );

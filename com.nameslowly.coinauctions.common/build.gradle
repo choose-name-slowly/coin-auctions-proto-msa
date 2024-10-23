@@ -28,6 +28,11 @@ ext {
 }
 
 dependencies {
+	// zipkin  Micrometer와의 연동까지 포함, 더 세밀한 제어를 위해 씀)
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'io.github.openfeign:feign-micrometer'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+
 	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 

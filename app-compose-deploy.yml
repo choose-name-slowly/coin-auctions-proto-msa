@@ -10,6 +10,16 @@ services:
       dockerfile: ./com.nameslowly.coinauctions.server/Dockerfile # 빌드할 이미지이름
     ports:
       - "8761:8761"
+    # gitAction 에서 빌드된 애들임. 빌드 시에 아래 Image 이름으로 build. (.github > workflows > dockerTagAndPush.sh 확인)
+    # ex) 010928219716.dkr.ecr.ap-northeast-2.amazonaws.com/sparta/server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/server:latest
+
+    # build 는 로컬의 Dockerfile을 사용해 이미지를 빌드
+    # image 는 이미 레지스트리에 있는 이미지를 가져와 컨테이너를 실행
+
+    ############## build 가 image 보다 우선된다 ########################################
+    ########### 즉 로컬 이미지 빌드쓰고 ECR 안가져와서 최신화 안될것으로 예상디버깅예정 #########
+    ####################### 일단 에러만 없애보자 #######################################
 
   gateway:
     networks:
@@ -21,8 +31,10 @@ services:
     ports:
       - "8080:8080"
       - "19090:19090"  # Actuator 엔드포인트 포트 (운영환경)
+
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/gateway:latest
 
   auth-server:
     networks:
@@ -36,6 +48,7 @@ services:
       - "19091:19091"  # Actuator 엔드포인트 포트 (운영환경)
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/auth:latest
 
   auction-server:
     networks:
@@ -49,6 +62,7 @@ services:
       - "19092:19092"  # Actuator 엔드포인트 포트 (운영환경)
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/auction:latest
 
   bidwin-server:
     networks:
@@ -62,6 +76,7 @@ services:
       - "19093:19093"  # Actuator 엔드포인트 포트 (운영환경)
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/bidwin:latest
 
   chat-server:
     networks:
@@ -75,6 +90,7 @@ services:
       - "19095:19095"  # Actuator 엔드포인트 포트 (운영환경)
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/chat:latest
 
   coinpay-server:
     networks:
@@ -88,6 +104,7 @@ services:
       - "19094:19094"  # Actuator 엔드포인트 포트 (운영환경)
     depends_on:
       - eureka-server
+    image: ${ECR_REGISTRY}/${ECR_NAMESPACE}/coinpay:latest
 
 networks:
   auction-network:

@@ -25,7 +25,7 @@ public class ChatMessageController {
         //채팅방 과거 메시지 기록 조회
         String beforeMsgs = chatMessageService.getChatMessages(message);
 
-        String enterMsg = message.getSenderId() + "님이 입장하셨습니다.";
+        String enterMsg = "--- " + message.getSenderId() + "님이 입장하셨습니다. ---";
         message.setMessage(beforeMsgs + enterMsg);
 
         chatMessageService.saveChatMessage(message, enterMsg);
@@ -41,7 +41,7 @@ public class ChatMessageController {
 
     @MessageMapping("/chat/exit")
     public void exit(ChatMessageDto message) {
-        message.setMessage(message.getSenderId() + "님이 퇴장하셨습니다.");
+        message.setMessage("--- " + message.getSenderId() + "님이 퇴장하셨습니다. ---");
         chatMessageService.saveChatMessage(message);
         template.convertAndSend("/subscribe/chat/room/inout/" + message.getChatroomId(), message);
     }

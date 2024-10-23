@@ -1,0 +1,25 @@
+# 프로메테우스 설정 파일 (monitroing-compose.yml 에서 실행)
+# 모니터링할 타겟과 기타 설정을 정의
+
+global:
+  scrape_interval: 15s # 메트릭 수집 주기
+
+scrape_configs:
+  - job_name: 'spring-boot-auction' # 작업의 이름, Prometheus UI에서 식별
+    metrics_path: '/actuator/prometheus' # Prometheus 가 메트릭을 수집할 경로
+    static_configs: # Prometheus 가 메트릭을 수집할 대상
+      - targets: # 애플리케이션 메트릭정보 얻기위함
+          - 'gateway-service:19090'
+          - 'userauth-service:19091'
+          - 'coinpay-service:19094'
+          - 'auction-service:19092'
+          - 'bidwin-service:19093'
+          - 'chat-service:19095'
+          - 'eureka-service:8761'
+
+  - job_name: 'zipkin-auction' # 작업의 이름, Prometheus UI에서 식별
+    metrics_path: '/actuator/prometheus' # Prometheus 가 메트릭을 수집할 경로
+    static_configs: # Prometheus 가 메트릭을 수집할 대상
+      - targets: ['zipkin:9411'] # zipkin 에서 트레이싱정보 얻기위함
+
+############### 각 서버 설정하여 메트릭 수집해야할듯 #########################

@@ -28,6 +28,17 @@ ext {
 }
 
 dependencies {
+	// zipkin (spring boot3 부터는 sleuth 쓰고 micrometer 트레이싱)
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'io.github.openfeign:feign-micrometer'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+
+	// actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// proemetheus
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
 	// 공통모듈
 	implementation(project(':com.nameslowly.coinauctions.common')) {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-data-jpa'

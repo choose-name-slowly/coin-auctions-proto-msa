@@ -9,7 +9,7 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Prometheus 설정 파일
     networks:
-      - monitoring-network
+      - auction-network
 
   grafana:  # Grafana
     image: grafana/grafana
@@ -17,7 +17,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - monitoring-network
+      - auction-network
 
   zipkin:  # Zipkin
     image: openzipkin/zipkin
@@ -25,7 +25,7 @@ services:
     ports:
       - "9411:9411"
     networks:
-      - monitoring-network
+      - auction-network
 
 networks:
-  monitoring-network:
+  auction-network:

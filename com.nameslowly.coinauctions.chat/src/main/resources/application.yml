@@ -17,3 +17,37 @@ message:
   exchange: app
   queue:
     auction-info: app.auction.info
+
+# 액츄에이터 설정
+management:
+  # Actuator 엔드포인트를 19090 포트에서 노출
+  # TODO : 향후 security 에서 /actuactor/** 에 대한 보안설정 추가할 수 있다
+  server:
+    port: 19095
+
+  endpoint:
+    # 이 설정은 /actuator/health 엔드포인트에서 헬스 체크 정보를 항상 상세히 보여주도록 설정합니다.
+    # 기본적으로, 헬스 체크 엔드포인트는 요약된 상태 정보만 제공하며, 상세 정보는 노출되지 않습니다.
+    health:
+      show-details: always
+
+  endpoints:
+    # 모든 엔드포인트 노출 설정
+    web:
+      exposure:
+        include: '*'
+
+  # 프로메테우스를 위해 Actuator 메트릭을 활성화
+  # 이제 Prometheus가 /actuator/prometheus 엔드포인트에서 메트릭을 수집할 수 있음
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+  ######################## 집킨 설정 ########################
+  zipkin:
+    tracing:
+      endpoint: "http://zipkin:9411/api/v2/spans" # Zipkin's HTTP endpoint
+  tracing:
+    sampling:
+      probability: 1.0

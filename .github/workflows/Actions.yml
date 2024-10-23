@@ -192,23 +192,23 @@ jobs:
             
             # 기존 이미지 삭제함
             # ---> 해당 docker compose 로 만든 이미지만 삭제한다고함
-            docker-compose -f db-compose.yml down --rmi all -v
-            docker-compose -f app-compose.yml down --rmi all -v         
+            docker-compose -f db-compose-deploy.yml down --rmi all -v
+            docker-compose -f app-compose-deploy.yml down --rmi all -v         
           
-            docker-compose -f db-compose.yml down -v
+            docker-compose -f db-compose-deploy.yml down -v
             sleep 60 # db 인간적으로 컨테이너 내려가는 시간좀 주자
-            docker-compose -f app-compose.yml down -v
+            docker-compose -f app-compose-deploy.yml down -v
             sleep 60 # db 인간적으로 컨테이너 내려가는 시간좀 주자
 
             docker ps -a # 컨테이너 다 내려갔는지 보자
 
-            docker-compose -f db-compose.yml pull
-            docker-compose -f app-compose.yml pull
+            docker-compose -f db-compose-deploy.yml pull
+            docker-compose -f app-compose-deploy.yml pull
             sleep 60 # db 인간적으로 이미지 받는 시간좀 주자
           
             docker images # 받는 이미지도 한 번 보자
             docker ps -a # 컨테이너 상태 다시보자
             
-            docker-compose -f db-compose.yml up -d
+            docker-compose -f db-compose-deploy.yml up -d
             sleep 60 # db 띄울때까지 좀 쉬렴
-            docker-compose -f app-compose.yml up -d
+            docker-compose -f app-compose-deploy.yml up -d

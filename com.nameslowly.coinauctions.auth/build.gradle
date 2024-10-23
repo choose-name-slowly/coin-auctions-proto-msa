@@ -28,6 +28,22 @@ ext {
 }
 
 dependencies {
+
+	// zipkin (Spring Cloud 환경에서 간단하게 Zipkin과 통합)
+	//	implementation "org.springframework.cloud:spring-cloud-starter-zipkin"
+	//	implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
+
+	// zipkin  Micrometer와의 연동까지 포함, 더 세밀한 제어를 위해 씀)
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'io.github.openfeign:feign-micrometer'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+
+	// actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// proemetheus
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
@@ -67,6 +83,7 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// test database
