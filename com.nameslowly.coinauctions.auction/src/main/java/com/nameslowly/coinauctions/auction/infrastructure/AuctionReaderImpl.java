@@ -4,6 +4,8 @@ import com.nameslowly.coinauctions.auction.domain.model.Auction;
 import com.nameslowly.coinauctions.auction.domain.model.AuctionStatus;
 import com.nameslowly.coinauctions.auction.domain.repository.AuctionRepository;
 import com.nameslowly.coinauctions.auction.domain.service.AuctionReader;
+import com.nameslowly.coinauctions.common.exception.GlobalException;
+import com.nameslowly.coinauctions.common.response.ResultCase;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,15 @@ public class AuctionReaderImpl implements AuctionReader {
 
     @Override
     public Auction getAuction(Long auctionId) {
-        return auctionRepository.findById(auctionId).orElseThrow();
+        return auctionRepository.findById(auctionId).orElseThrow(
+            () -> new GlobalException(ResultCase.NOT_FOUND_AUCTION)
+        );
+    }
+
+    @Override
+    public Auction getAuctionWithLock(Long auctionId) {
+        return auctionRepository.findByIdWithLock(auctionId).orElseThrow(
+            () -> new GlobalException(ResultCase.NOT_FOUND_AUCTION)
+        );
     }
 }

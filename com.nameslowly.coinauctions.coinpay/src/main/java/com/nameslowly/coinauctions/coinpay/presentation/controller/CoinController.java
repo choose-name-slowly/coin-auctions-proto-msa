@@ -31,6 +31,10 @@ public class CoinController {
     public CommonResponse getAllCoins() {
         return CommonResponse.success(coinService.getAllCoins());
     }
+    @GetMapping("/coins/{coinId}")
+    public CommonResponse getCoinByCoinId(@PathVariable Long coinId) {
+        return CommonResponse.success(coinService.getCoinById(coinId));
+    }
 
     @RoleCheck(roles = {"MASTER"})
     @DeleteMapping("/coins/{coinId}")

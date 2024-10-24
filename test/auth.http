@@ -5,7 +5,7 @@ Content-Type: application/json
 {
     "username": "user1234",
     "password": "pwd1234@",
-    "role" : "MASTER"
+    "role" : "USER"
 }
 
 ### 로그인

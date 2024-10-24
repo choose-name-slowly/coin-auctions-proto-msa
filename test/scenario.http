@@ -36,6 +36,10 @@ Authorization: {{token}}
   "registerUsername": "register789"
 }
 
+### 경매 시작
+POST {{host}}:8080/api/auctions/start
+Authorization: {{token}}
+
 ### bider456 로그인
 POST {{host}}:8080/user/login
 Content-Type: application/json
@@ -56,13 +60,9 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "charge_amount": 10000,
+  "charge_amount": 10009900,
   "coin_id": 1
 }
-
-### 경매 시작
-POST {{host}}:8080/api/auctions/start
-Authorization: {{token}}
 
 ### bider456 최초 입찰 // 경매 시작가보다 적음
 POST {{host}}:8080/api/bids
@@ -144,7 +144,7 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-  "charge_amount": 5000,
+  "charge_amount": 5000000,
   "coin_id": 1
 }
 

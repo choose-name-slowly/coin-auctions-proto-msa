@@ -13,4 +13,5 @@ public interface AuctionReader {
     List<Auction> getAuctionPage(Pageable page);
 
     Auction getAuction(Long auctionId);
+    Auction getAuctionWithLock(Long auctionId);
 }

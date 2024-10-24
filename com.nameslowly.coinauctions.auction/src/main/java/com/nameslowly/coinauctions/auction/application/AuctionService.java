@@ -59,7 +59,7 @@ public class AuctionService {
 
     @Transactional
     public void updateAuctionWin(BidAuctionDto dto) {
-        Auction auction = auctionReader.getAuction(dto.getAuctionId());
+        Auction auction = auctionReader.getAuctionWithLock(dto.getAuctionId());
         auction.updateWin(dto.getWinnerUsername(), dto.getWinAmount());
     }
 

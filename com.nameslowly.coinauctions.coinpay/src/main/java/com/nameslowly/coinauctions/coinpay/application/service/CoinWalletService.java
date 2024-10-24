@@ -88,10 +88,10 @@ public class CoinWalletService {
 
         coinWalletRepository.save(coinWallet);
         // CoinHistory 저장
-//        coinHistoryService.createCoinHistory(username, request.getCoin_id(), quantity, balanceBefore, balanceAfter,
-//            "코인 충전");
-        saveCoinHistoryAsync(username, request.getCoin_id(), quantity, balanceBefore, balanceAfter,
+        coinHistoryService.createCoinHistory(username, request.getCoin_id(), quantity, balanceBefore, balanceAfter,
             "코인 충전");
+//        saveCoinHistoryAsync(username, request.getCoin_id(), quantity, balanceBefore, balanceAfter,
+//            "코인 충전");
         return coinWallet.toCoinWalletVO();
     }
 
@@ -151,9 +151,9 @@ public class CoinWalletService {
         coinWallet.coinWalletUpdate(updatedQuantity);
         coinWalletRepository.save(coinWallet);
         // CoinHistory 저장
-//        coinHistoryService.createCoinHistory(request.getUsername(), request.getCoin_id(), request.getQuantity(),
-//            balanceBefore, updatedQuantity, "코인 회복");
-        saveCoinHistoryAsync(request.getUsername(), request.getCoin_id(), request.getQuantity(),
+        coinHistoryService.createCoinHistory(request.getUsername(), request.getCoin_id(), request.getQuantity(),
             balanceBefore, updatedQuantity, "코인 회복");
+//        saveCoinHistoryAsync(request.getUsername(), request.getCoin_id(), request.getQuantity(),
+//            balanceBefore, updatedQuantity, "코인 회복");
     }
 }
